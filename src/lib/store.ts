@@ -5,7 +5,7 @@ import {
   configureStore,
 } from "@reduxjs/toolkit";
 import { createLogger } from "redux-logger";
-import { persistReducer } from "redux-persist";
+import { persistReducer, persistStore } from "redux-persist";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 import countReducer from "./countSlice";
 
@@ -52,12 +52,12 @@ export const makeStore = () => {
         immutableCheck: process.env.NODE_ENV === "development",
       }).concat(...middlewares),
   });
-
-  return store;
+  const persistor = persistStore(store);
+  return { store, persistor };
 };
 
 // Infer the type of makeStore
 export type AppStore = ReturnType<typeof makeStore>;
 // Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<AppStore["getState"]>;
-export type AppDispatch = AppStore["dispatch"];
+export type RootState = ReturnType<AppStore["store"]["getState"]>;
+export type AppDispatch = AppStore["store"]["dispatch"];
