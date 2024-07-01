@@ -1,43 +1,7 @@
-import {
-  Dispatch,
-  Middleware,
-  combineReducers,
-  configureStore,
-} from "@reduxjs/toolkit";
+import { Dispatch, Middleware, configureStore } from "@reduxjs/toolkit";
 import { createLogger } from "redux-logger";
-import { persistReducer, persistStore } from "redux-persist";
-import createWebStorage from "redux-persist/lib/storage/createWebStorage";
-import countReducer from "./countSlice";
-
-const createNoopStorage = () => {
-  return {
-    getItem() {
-      return Promise.resolve(null);
-    },
-    setItem(_key: string, value: number) {
-      return Promise.resolve(value);
-    },
-    removeItem() {
-      return Promise.resolve();
-    },
-  };
-};
-
-const storage =
-  typeof window !== "undefined"
-    ? createWebStorage("local")
-    : createNoopStorage();
-
-const authPersistConfig = {
-  key: "count",
-  storage: storage,
-};
-
-const persistedReducer = persistReducer(authPersistConfig, countReducer);
-
-const rootReducer = combineReducers({
-  count: persistedReducer,
-});
+import { persistStore } from "redux-persist";
+import rootReducer from "./rootReducer";
 
 const middlewares: Middleware<Record<string, never>, any, Dispatch>[] = [];
 
