@@ -1,0 +1,32 @@
+{
+  "name": "next-mantine-template",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@mantine/core": "^7.11.0",
+    "@mantine/dates": "^7.11.0",
+    "@mantine/form": "^7.11.0",
+    "@mantine/hooks": "^7.11.0",
+    "@mantine/modals": "^7.11.0",
+    "@mantine/notifications": "^7.11.0",
+    "@mantine/nprogress": "^7.11.0",
+    "dayjs": "^1.11.11",
+    "next": "14.2.4",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.4",
+    "typescript": "^5"
+  }
+}
