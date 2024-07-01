@@ -1,4 +1,10 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import {
+  Dispatch,
+  Middleware,
+  combineReducers,
+  configureStore,
+} from "@reduxjs/toolkit";
+import { createLogger } from "redux-logger";
 import { persistReducer } from "redux-persist";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 import countReducer from "./countSlice";
@@ -23,7 +29,7 @@ const storage =
     : createNoopStorage();
 
 const authPersistConfig = {
-  key: "auth",
+  key: "count",
   storage: storage,
 };
 
@@ -33,12 +39,21 @@ const rootReducer = combineReducers({
   count: persistedReducer,
 });
 
+const middlewares: Middleware<Record<string, never>, any, Dispatch>[] = [];
+
+if (process.env.NODE_ENV === "development") middlewares.push(createLogger());
+
 export const makeStore = () => {
-  return configureStore({
+  const store = configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({ serializableCheck: false }),
+      getDefaultMiddleware({
+        serializableCheck: false,
+        immutableCheck: process.env.NODE_ENV === "development",
+      }).concat(...middlewares),
   });
+
+  return store;
 };
 
 // Infer the type of makeStore
