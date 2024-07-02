@@ -1,59 +1,43 @@
 "use client";
-import { decrement, increment } from "@/lib/countSlice";
-
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { AppShell, Burger, Group, Skeleton } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { FaCheck } from "react-icons/fa";
 
 export default function Home() {
-  const dispatch = useAppDispatch();
-  const counter = useAppSelector((state) => state.count.count);
-  const handleIncrement = () => {
-    dispatch(increment());
-  };
-
-  const handleDecrement = () => {
-    dispatch(decrement());
-  };
+  const [opened, { toggle }] = useDisclosure();
 
   return (
-    <div style={{ backgroundColor: "white" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          flexDirection: "column",
-        }}
-      >
-        This is a persisted counter
-        <div
-          style={{ display: "flex", alignItems: "center", marginTop: "1rem" }}
-        >
-          <button
-            onClick={handleDecrement}
-            style={{
-              backgroundColor: "red",
-              color: "white",
-              padding: "0.5rem 1rem",
-              borderRadius: "0.5rem",
-            }}
-          >
-            -
-          </button>
-          <p style={{ margin: "0 2rem", color: "black" }}>{counter}</p>
-          <button
-            onClick={handleIncrement}
-            style={{
-              backgroundColor: "green",
-              color: "white",
-              padding: "0.5rem 1rem",
-              borderRadius: "0.5rem",
-            }}
-          >
-            +
-          </button>
-        </div>
-      </div>
-    </div>
+    <AppShell
+      header={{ height: 60 }}
+      footer={{ height: 60 }}
+      navbar={{ width: 300, breakpoint: "sm", collapsed: { mobile: !opened } }}
+      aside={{
+        width: 300,
+        breakpoint: "md",
+        collapsed: { desktop: false, mobile: true },
+      }}
+      padding="md"
+    >
+      <AppShell.Header>
+        <Group h="100%" px="md">
+          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+          <FaCheck size={30} />
+        </Group>
+      </AppShell.Header>
+      <AppShell.Navbar p="md">
+        Navbar
+        {Array(15)
+          .fill(0)
+          .map((_, index) => (
+            <Skeleton key={index} h={28} mt="sm" animate={false} />
+          ))}
+      </AppShell.Navbar>
+      <AppShell.Main>
+        Aside is hidden on on md breakpoint and cannot be opened when it is
+        collapsed
+      </AppShell.Main>
+      <AppShell.Aside p="md">Aside</AppShell.Aside>
+      <AppShell.Footer p="md">Footer</AppShell.Footer>
+    </AppShell>
   );
 }

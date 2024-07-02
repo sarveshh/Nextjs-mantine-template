@@ -1,7 +1,12 @@
 import { ColorSchemeScript, MantineProvider } from "@mantine/core";
+import "@mantine/core/styles.css";
+import { MantineEmotionProvider, emotionTransform } from "@mantine/emotion";
+import { ModalsProvider } from "@mantine/modals";
+import { Notifications } from "@mantine/notifications";
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Inter } from "next/font/google";
+import { RootStyleRegistry } from "./EmotionRootStyleRegistry";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -27,7 +32,14 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <StoreProvider>
-          <MantineProvider>{children}</MantineProvider>
+          <RootStyleRegistry>
+            <MantineEmotionProvider>
+              <MantineProvider stylesTransform={emotionTransform}>
+                <Notifications />
+                <ModalsProvider>{children}</ModalsProvider>
+              </MantineProvider>
+            </MantineEmotionProvider>
+          </RootStyleRegistry>
         </StoreProvider>
       </body>
     </html>
